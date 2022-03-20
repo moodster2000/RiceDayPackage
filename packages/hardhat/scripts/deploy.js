@@ -24,9 +24,17 @@ And learn more here: https://www.npmjs.com/package/hardhat-deploy
 */
 
 const main = async () => {
+
+  const toAddress = "0xC8903A1BeB1772bFad93F942951eB17455830985"
+
+
   console.log("\n\n 📡 Deploying...\n");
 
-  const yourContract = await deploy("YourContract"); // <-- add in constructor args like line 19 vvvv
+  const yourContract = await deploy("RiceDay"); // <-- add in constructor args like line 19 vvvv
+  
+  console.log("\ntransfering ownership\n");
+  await yourContract.transferOwnership(toAddress)
+  
   // use for local token bridging
   // const mockToken = await deploy("MockERC20") // <-- add in constructor args like line 19 vvvv
 

@@ -1,0 +1,90 @@
+.App {
+  display: flex;
+  flex-direction: column;
+  // background-color: #fcf5eb;
+  .sticker{
+    width: 10%;
+    object-fit: fill;
+  }
+}
+.mobileApp {
+  
+  // .background {
+  //   height: 100%;
+  //   object-fit: cover;
+  //   width: 100%;
+  // }
+  // padding-left: 6%;
+  // padding-right: 6%;
+  // padding-top: 4%;
+  // .appBar {
+  //   display: flex;
+  //   width: 100%;
+  //   .left {
+  //     width: 50%;
+  //     padding-top: 1%;
+  //     .banner {
+  //       height: 20vmin;
+  //     }
+  //   }
+  //   .right {
+  //     width: 50%;
+  //     display: flex;
+  //     justify-content: flex-end;
+  //     .logo {
+  //       height: 9vmin;
+  //       background-color: transparent;
+  //       border-radius: 25%;
+  //     }
+  //   }
+  // }
+  // .content {
+  //   margin-top: 20%;
+  //   width: 100%;
+  //   height: 95vmin;
+  //   // background-color: #3D3D3D;
+  //   .title {
+  //     line-height: 97%;
+  //     color: #3d3d3d;
+  //     letter-spacing: -0.06em;
+  //     font-size: 7vh;
+  //     font-family: "Be Vietnam Pro", sans-serif;
+  //   }
+  //   .subTitle {
+  //     margin-top: 4%;
+  //     font-weight: 320;
+  //     line-height: 144%;
+  //     color: #3d3d3d;
+  //     font-size: 2vh;
+  //     font-family: "Be Vietnam Pro", sans-serif;
+  //   }
+
+  //   .buttonRow {
+  //     margin-top: 8%;
+  //     display: flex;
+  //     flex-direction: row;
+  //     justify-content: space-between;
+  //     // overflow: hidden;
+  //     .buttonDesign {
+  //       border-radius: 60px;
+  //       box-shadow: 0px 7.68212px 11.5232px rgba(0, 0, 0, 0.15);
+  //       padding-top: 2%;
+  //       padding-bottom: 2%;
+  //       background-color: white;
+  //       width: 45%;
+  //       font-size: 2.5vh;
+  //       color: #3d3d3d;
+  //       align-content: center;
+  //       justify-content: center;
+  //       display: flex;
+  //     }
+
+  //     .buttonDesign:active {
+  //       background-color: #3fa9f5;
+  //       box-shadow: 0px 7.68212px 11.5232px rgba(0, 0, 0, 0.15);
+  //       color: white;
+  //       transition: all 0.3s ease-in-out;
+  //     }
+  //   }
+  // }
+}

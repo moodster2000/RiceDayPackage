@@ -10,8 +10,10 @@ import {
 } from "eth-hooks";
 import { useExchangeEthPrice } from "eth-hooks/dapps/dex";
 import React, { useCallback, useEffect, useState } from "react";
-import { Link, Route, Switch, useLocation } from "react-router-dom";
+import { BrowserRouter, Link, Route, Switch, useLocation, useHistory } from "react-router-dom";
+import { HashLink } from "react-router-hash-link";
 import "./App.css";
+import "./App.scss";
 import {
   Account,
   Contract,
@@ -23,6 +25,25 @@ import {
   NetworkDisplay,
   FaucetHint,
   NetworkSwitch,
+  Footer,
+  Roadmap,
+  FAQ,
+  About,
+  HomePage,
+  Team,
+  MusicPlayer,
+  AppBar,
+  MobileFooter,
+  MobileFAQ,
+  MobileRoadmap,
+  MobileTeam,
+  MobileAbout,
+  MobileHomePage,
+  MobileAppbar,
+  UnknownPage,
+  MintPage,
+  MobileMintPage,
+  MobileUnknownPage,
 } from "./components";
 import { NETWORKS, ALCHEMY_KEY } from "./constants";
 import externalContracts from "./contracts/external_contracts";
@@ -31,6 +52,21 @@ import deployedContracts from "./contracts/hardhat_contracts.json";
 import { Transactor, Web3ModalSetup } from "./helpers";
 import { Home, ExampleUI, Hints, Subgraph } from "./views";
 import { useStaticJsonRPC } from "./hooks";
+import banner from "./bannerRD.png";
+import backgroundImage from "./background.png";
+import backgroundVideo from "./backgroundVideo.mp4";
+import mobileBackground from "./mobileBackground.png";
+
+import playLogo from "./logo/Play.svg";
+import pauseLogo from "./logo/Pause.svg";
+import twitterLogo from "./logo/Twitter.svg";
+import mediumLogo from "./logo/Medium.svg";
+import discordLogo from "./logo/Discord.svg";
+import themeSong from "./themeSong.wav";
+import useSound from "use-sound";
+import ReactPlayer from "react-player";
+import mobile from "is-mobile";
+import { useMediaQuery } from "react-responsive";
 
 const { ethers } = require("ethers");
 /*
@@ -71,14 +107,21 @@ const providers = [
 ];
 
 function App(props) {
+  const isPortrait = useMediaQuery({ query: "(orientation: portrait)" });
   // specify all the chains your app is available on. Eg: ['localhost', 'mainnet', ...otherNetworks ]
   // reference './constants.js' for other networks
   const networkOptions = [initialNetwork.name, "mainnet", "rinkeby"];
 
   const [injectedProvider, setInjectedProvider] = useState();
   const [address, setAddress] = useState();
-  const [selectedNetwork, setSelectedNetwork] = useState(networkOptions[0]);
+  const [selectedNetwork, setSelectedNetwork] = useState(networkOptions[2]);
   const location = useLocation();
+
+  //audio Controls
+  const [pausePlay, setPausePlay] = useState("play");
+  const [play, { stop }] = useSound(themeSong, {
+    volume: 0.2,
+  });
 
   const targetNetwork = NETWORKS[selectedNetwork];
 
@@ -167,8 +210,10 @@ function App(props) {
   ]);
 
   // keep track of a variable from the contract in the local React state:
-  const purpose = useContractReader(readContracts, "YourContract", "purpose");
-
+  const maxSupply = useContractReader(readContracts, "RiceDay", "MAX_SUPPLY");
+  if (maxSupply) {
+    console.log(`max supply bois`, maxSupply.toString());
+  }
   /*
   const addressFromENS = useResolveName(mainnetProvider, "austingriffith.eth");
   console.log("🏷 Resolved austingriffith.eth as:",addressFromENS)
@@ -244,188 +289,230 @@ function App(props) {
 
   const faucetAvailable = localProvider && localProvider.connection && targetNetwork.name.indexOf("local") !== -1;
 
-  return (
+  let history = useHistory();
+  const [route, setRoute] = useState();
+  useEffect(() => {
+    setRoute(window.location.pathname);
+  }, [setRoute]);
+
+  return mobile() == false ? (
     <div className="App">
-      {/* ✏️ Edit the header and change the title to your project name */}
-      <Header />
-      <NetworkDisplay
-        NETWORKCHECK={NETWORKCHECK}
-        localChainId={localChainId}
-        selectedChainId={selectedChainId}
-        targetNetwork={targetNetwork}
-        logoutOfWeb3Modal={logoutOfWeb3Modal}
-        USE_NETWORK_SELECTOR={USE_NETWORK_SELECTOR}
-      />
-      <Menu style={{ textAlign: "center", marginTop: 40 }} selectedKeys={[location.pathname]} mode="horizontal">
-        <Menu.Item key="/">
-          <Link to="/">App Home</Link>
-        </Menu.Item>
-        <Menu.Item key="/debug">
-          <Link to="/debug">Debug Contracts</Link>
-        </Menu.Item>
-        <Menu.Item key="/hints">
-          <Link to="/hints">Hints</Link>
-        </Menu.Item>
-        <Menu.Item key="/exampleui">
-          <Link to="/exampleui">ExampleUI</Link>
-        </Menu.Item>
-        <Menu.Item key="/mainnetdai">
-          <Link to="/mainnetdai">Mainnet DAI</Link>
-        </Menu.Item>
-        <Menu.Item key="/subgraph">
-          <Link to="/subgraph">Subgraph</Link>
-        </Menu.Item>
-      </Menu>
-
-      <Switch>
-        <Route exact path="/">
-          {/* pass in any web3 props to this Home component. For example, yourLocalBalance */}
-          <Home yourLocalBalance={yourLocalBalance} readContracts={readContracts} />
-        </Route>
-        <Route exact path="/debug">
-          {/*
-                🎛 this scaffolding is full of commonly used components
-                this <Contract/> component will automatically parse your ABI
-                and give you a form to interact with it locally
-            */}
-
-          <Contract
-            name="YourContract"
-            price={price}
-            signer={userSigner}
-            provider={localProvider}
-            address={address}
-            blockExplorer={blockExplorer}
-            contractConfig={contractConfig}
-          />
-        </Route>
-        <Route path="/hints">
-          <Hints
-            address={address}
-            yourLocalBalance={yourLocalBalance}
-            mainnetProvider={mainnetProvider}
-            price={price}
-          />
-        </Route>
-        <Route path="/exampleui">
-          <ExampleUI
-            address={address}
-            userSigner={userSigner}
-            mainnetProvider={mainnetProvider}
-            localProvider={localProvider}
-            yourLocalBalance={yourLocalBalance}
-            price={price}
-            tx={tx}
-            writeContracts={writeContracts}
-            readContracts={readContracts}
-            purpose={purpose}
-          />
-        </Route>
-        <Route path="/mainnetdai">
-          <Contract
-            name="DAI"
-            customContract={mainnetContracts && mainnetContracts.contracts && mainnetContracts.contracts.DAI}
-            signer={userSigner}
-            provider={mainnetProvider}
-            address={address}
-            blockExplorer="https://etherscan.io/"
-            contractConfig={contractConfig}
-            chainId={1}
-          />
-          {/*
-            <Contract
-              name="UNI"
-              customContract={mainnetContracts && mainnetContracts.contracts && mainnetContracts.contracts.UNI}
-              signer={userSigner}
-              provider={mainnetProvider}
+      <BrowserRouter>
+        <Switch>
+          <Route exact path="/">
+            <section id="">
+              <HomePage address={address} web3Modal={web3Modal} />
+            </section>
+            <section id="about">
+              <About />
+            </section>
+            <section id="team">
+              <Team />
+            </section>
+            <section id="roadmap">
+              <Roadmap />
+            </section>
+            <section id="FAQ">
+              <FAQ />
+            </section>
+            <Footer />
+            <AppBar
+              useBurner={USE_BURNER_WALLET}
               address={address}
-              blockExplorer="https://etherscan.io/"
+              localProvider={localProvider}
+              userSigner={userSigner}
+              mainnetProvider={mainnetProvider}
+              price={price}
+              web3Modal={web3Modal}
+              loadWeb3Modal={loadWeb3Modal}
+              logoutOfWeb3Modal={logoutOfWeb3Modal}
+              blockExplorer={blockExplorer}
             />
-            */}
-        </Route>
-        <Route path="/subgraph">
-          <Subgraph
-            subgraphUri={props.subgraphUri}
-            tx={tx}
-            writeContracts={writeContracts}
-            mainnetProvider={mainnetProvider}
-          />
-        </Route>
-      </Switch>
-
-      <ThemeSwitch />
-
-      {/* 👨‍💼 Your account is in the top right with a wallet at connect options */}
-      <div style={{ position: "fixed", textAlign: "right", right: 0, top: 0, padding: 10 }}>
-        <div style={{ display: "flex", flex: 1, alignItems: "center" }}>
-          {USE_NETWORK_SELECTOR && (
-            <div style={{ marginRight: 20 }}>
-              <NetworkSwitch
-                networkOptions={networkOptions}
-                selectedNetwork={selectedNetwork}
-                setSelectedNetwork={setSelectedNetwork}
-              />
-            </div>
-          )}
-          <Account
-            useBurner={USE_BURNER_WALLET}
-            address={address}
-            localProvider={localProvider}
-            userSigner={userSigner}
-            mainnetProvider={mainnetProvider}
-            price={price}
-            web3Modal={web3Modal}
-            loadWeb3Modal={loadWeb3Modal}
-            logoutOfWeb3Modal={logoutOfWeb3Modal}
-            blockExplorer={blockExplorer}
-          />
+          </Route>
+          <Route path="/projectBeta">
+            <MintPage
+              address={address}
+              loadWeb3Modal={loadWeb3Modal}
+              web3Modal={web3Modal}
+              readContracts={readContracts}
+              writeContracts = {writeContracts}
+              tx = {tx}
+            />
+            <AppBar
+              useBurner={USE_BURNER_WALLET}
+              address={address}
+              localProvider={localProvider}
+              userSigner={userSigner}
+              mainnetProvider={mainnetProvider}
+              price={price}
+              web3Modal={web3Modal}
+              loadWeb3Modal={loadWeb3Modal}
+              logoutOfWeb3Modal={logoutOfWeb3Modal}
+              blockExplorer={blockExplorer}
+            />
+          </Route>
+          <Route path="*">
+            <UnknownPage />
+            <AppBar
+              useBurner={USE_BURNER_WALLET}
+              address={address}
+              localProvider={localProvider}
+              userSigner={userSigner}
+              mainnetProvider={mainnetProvider}
+              price={price}
+              web3Modal={web3Modal}
+              loadWeb3Modal={loadWeb3Modal}
+              logoutOfWeb3Modal={logoutOfWeb3Modal}
+              blockExplorer={blockExplorer}
+            />
+          </Route>
+        </Switch>
+      </BrowserRouter>
+    </div>
+  ) : isPortrait ? (
+    <div className="mobileApp">
+      <BrowserRouter>
+        <Switch>
+          <Route exact path="/">
+            <section id="">
+              <MobileHomePage address={address} web3Modal={web3Modal} />
+            </section>
+            <section id="about">
+              <MobileAbout />
+            </section>
+            <section id="team">
+              <MobileTeam />
+            </section>
+            <section id="roadmap">
+              <MobileRoadmap />
+            </section>
+            <section id="FAQ">
+              <MobileFAQ />
+            </section>
+            <MobileFooter />
+            <MobileAppbar
+              useBurner={USE_BURNER_WALLET}
+              address={address}
+              localProvider={localProvider}
+              userSigner={userSigner}
+              mainnetProvider={mainnetProvider}
+              price={price}
+              web3Modal={web3Modal}
+              loadWeb3Modal={loadWeb3Modal}
+              logoutOfWeb3Modal={logoutOfWeb3Modal}
+              blockExplorer={blockExplorer}
+            />
+          </Route>
+          <Route path="/projectBeta">
+            <MobileMintPage address={address} loadWeb3Modal={loadWeb3Modal} web3Modal={web3Modal} />
+            <MobileAppbar
+              useBurner={USE_BURNER_WALLET}
+              address={address}
+              localProvider={localProvider}
+              userSigner={userSigner}
+              mainnetProvider={mainnetProvider}
+              price={price}
+              web3Modal={web3Modal}
+              loadWeb3Modal={loadWeb3Modal}
+              logoutOfWeb3Modal={logoutOfWeb3Modal}
+              blockExplorer={blockExplorer}
+            />
+          </Route>
+          <Route path="*">
+            <MobileUnknownPage />
+            <MobileAppbar
+              useBurner={USE_BURNER_WALLET}
+              address={address}
+              localProvider={localProvider}
+              userSigner={userSigner}
+              mainnetProvider={mainnetProvider}
+              price={price}
+              web3Modal={web3Modal}
+              loadWeb3Modal={loadWeb3Modal}
+              logoutOfWeb3Modal={logoutOfWeb3Modal}
+              blockExplorer={blockExplorer}
+            />
+          </Route>
+        </Switch>
+      </BrowserRouter>
+    </div>
+  ) : (
+    <div className="App">
+      <video autoPlay loop muted className="background" poster={backgroundImage}></video>
+      <div className="topBar" style={{ zIndex: 2, position: "absolute", left: 0, top: 0 }}>
+        <div className="leftSide"></div>
+        <div className="center">
+          <img src={banner} className="banner" />
         </div>
-        {yourLocalBalance.lte(ethers.BigNumber.from("0")) && (
-          <FaucetHint localProvider={localProvider} targetNetwork={targetNetwork} address={address} />
-        )}
+        <div className="rightSide">
+          {/* must link to socials */}
+          <a className="logo" target="_blank" href="https://www.discord.gg/riceday">
+            <img src={discordLogo} className="logo" />
+          </a>
+          <a className="logo" target="_blank" href="https://www.twitter.com/ricedaygg">
+            <img src={twitterLogo} className="logo" />
+          </a>
+          {/* <a className="logo" target="_blank" href="https://www.twitter.com/ricedaygg">
+          <img src={mediumLogo} className="logo" />
+        </a> */}
+        </div>
       </div>
-
-      {/* 🗺 Extra UI like gas price, eth price, faucet, and support: */}
-      <div style={{ position: "fixed", textAlign: "left", left: 0, bottom: 20, padding: 10 }}>
-        <Row align="middle" gutter={[4, 4]}>
-          <Col span={8}>
-            <Ramp price={price} address={address} networks={NETWORKS} />
-          </Col>
-
-          <Col span={8} style={{ textAlign: "center", opacity: 0.8 }}>
-            <GasGauge gasPrice={gasPrice} />
-          </Col>
-          <Col span={8} style={{ textAlign: "center", opacity: 1 }}>
-            <Button
-              onClick={() => {
-                window.open("https://t.me/joinchat/KByvmRe5wkR-8F_zz6AjpA");
-              }}
-              size="large"
-              shape="round"
-            >
-              <span style={{ marginRight: 8 }} role="img" aria-label="support">
-                💬
-              </span>
-              Support
-            </Button>
-          </Col>
-        </Row>
-
-        <Row align="middle" gutter={[4, 4]}>
-          <Col span={24}>
-            {
-              /*  if the local provider has a signer, let's show the faucet:  */
-              faucetAvailable ? (
-                <Faucet localProvider={localProvider} price={price} ensProvider={mainnetProvider} />
-              ) : (
-                ""
-              )
-            }
-          </Col>
-        </Row>
+      <div className="content">
+        <div className="title">We're still cooking the rice</div>
+        <div className="subTitle">
+          RiceDay is aiming to create the first and best Web3 food loyalty program. Food + NFTs = connecting people from
+          everywhere, one grain at a time.
+        </div>
       </div>
     </div>
   );
 }
 
 export default App;
+
+{
+  /* <img
+        fit
+        src={mobileBackground}
+        className="background"
+        style={{ zIndex: -1, position: "absolute", left: 0, top: 0 }}
+      />
+      <div className="appBar">
+        <div className="left">
+          <img src={banner} className="banner" />
+        </div>
+        <div className="right">
+          <button
+            style={{ border: "none" }}
+            className="logo"
+            onClick={() => {
+              if (pausePlay == "pause") {
+                stop();
+                setPausePlay("play");
+              } else {
+                setPausePlay("pause");
+                play();
+              }
+            }}
+          >
+            {/* <img src={pausePlay == "pause" ? pauseLogo : playLogo} className="logo" /> */
+}
+//     </button>
+//   </div>
+// </div>
+// <div className="content">
+//   <div className="title">We're still cooking the rice</div>
+//   <div className="subTitle">
+//     RiceDay is aiming to create the first and best Web3 food loyalty program.
+//     <br />
+//     Food + NFTs = connecting people from everywhere, one grain at a time.
+//   </div>
+//   <div className="buttonRow">
+//     <a className="buttonDesign" target="_blank" href="https://www.discord.gg/riceday">
+//       <div className="buttonText">Discord</div>
+//     </a>
+//     <a className="buttonDesign" target="_blank" href="https://www.twitter.com/ricedaygg">
+//       <div className="buttonText">Twitter</div>
+//     </a>
+//   </div>
+// </div> */}

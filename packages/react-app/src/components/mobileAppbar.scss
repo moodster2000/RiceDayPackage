@@ -1,0 +1,90 @@
+.mobileAppBar {
+  transition: all 0.5s ;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  height: 20vmin;
+  background-color: #fcf5eb;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding-left: 5%;
+  padding-right: 5%;
+
+  color: #3D3D3D;
+
+  .section1 {
+    width: 32%;
+    .rdLogo {
+      width: 100%;
+      margin-right: 10%;
+      cursor: pointer;
+    }
+  }
+  .logo {
+    padding: 0;
+    width: 15%;
+  }
+}
+.mobileWalletButton {
+  cursor: pointer;
+  border: 2px solid #3d3d3d;
+  border-radius: 30px;
+  padding-top: 1%;
+  padding-bottom: 1%;
+  padding-left: 3%;
+  padding-right: 3%;
+  font-size: 1.9vh;
+  text-align: start;
+  font-family: "Be Vietnam Pro", sans-serif;
+}
+.mobileMenu {
+  transition: all 0.5s ease-in-out;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  height: 100vh;
+  background-color: #fcf5eb;
+  padding-left: 5%;
+  padding-right: 5%;
+  color: #3D3D3D;
+
+  .appBarAlt {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    height: 20vmin;
+    align-items: center;
+    .section1 {
+      width: 32%;
+      .rdLogo {
+        width: 100%;
+        margin-right: 10%;
+        cursor: pointer;
+      }
+    }
+    .logo {
+      padding: 0;
+      width: 15%;
+    }
+  }
+}
+.solid {
+  border: none;
+  border-top: 2px solid #d8c6ac;
+  border-radius: 5px;
+  margin-bottom: 5%;
+}
+.mobSection {
+  font-style: normal;
+  font-weight: bold;
+  text-transform: uppercase;
+  cursor: pointer;
+  /* Web/Dark Grey */
+  font-size: 2.8vh;
+  margin-bottom: 7%;
+  color: #3d3d3d;
+  text-align: start;
+  font-family: "Be Vietnam Pro", sans-serif;
+}

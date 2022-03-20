@@ -67,7 +67,9 @@
       "**/hardhat-ts/**"
     ]
   },
-  "dependencies": {},
+  "dependencies": {
+    "caniuse-lite": "^1.0.30001312"
+  },
   "devDependencies": {
     "husky": "^7.0.2"
   }

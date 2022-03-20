@@ -1,0 +1,63 @@
+.MusicPlayer {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  margin-bottom: 2%;
+  margin-left: 2%;
+  height: 8vmin;
+  width: 23%;
+  padding-left: 1%;
+  padding-right: 1%;
+  background-color: white;
+  box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.1);
+  border-radius: 20px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+
+  .logo {
+    height: 3vw;
+
+    cursor: pointer;
+
+    &:hover {
+      // While hovering
+      // Navigate to: "2_Loading Page_Hovered";
+      // Animate: Smart animate;
+      // animation-timing-function: ease-in;
+      // animation-duration: 200ms;
+      transition: all 0.3s ease-in-out;
+      transform: scale(1.1);
+      filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.1));
+    }
+  }
+  .vl {
+    display: flex;
+    align-self: center;
+    height: 5vmin;
+    border-left: 3px solid #dfdfdf;
+  }
+  .musicDetails {
+    // background-color: red;
+    margin-left: 4%;
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    font-family: "Be Vietnam Pro", sans-serif;
+    font-style: normal;
+    font-weight: normal;
+    text-align: start;
+    .title {
+      line-height: 97%;
+      font-size: 1.1vw;
+      font-weight: 400;
+      margin-bottom: 2%;
+    }
+    .subTitle {
+      color: #a0a0a0;
+      line-height: 97%;
+      font-size: 0.8vw;
+    }
+  }
+}

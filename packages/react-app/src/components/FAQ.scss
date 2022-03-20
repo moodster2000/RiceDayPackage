@@ -1,0 +1,83 @@
+.FAQ {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: 100%;
+  background-color: #fcf5eb;
+  color: #3D3D3D;
+  -webkit-font-smoothing: antialiased;
+  // padding-top: 2%;
+  .content {
+    // padding-top: 3%;
+    padding-bottom: 3%;
+    padding-left: 8%;
+    padding-right: 8%;
+    .webTitle {
+      text-align: start;
+      font-family: "Be Vietnam Pro", sans-serif;
+      font-style: normal;
+      font-weight: 400;
+      line-height: 70px;
+      font-size: 3.75vw;
+      color: #3d3d3d;
+      letter-spacing: -0.05em;
+      -webkit-font-smoothing: antialiased;
+
+    }
+    .listOfQuestions {
+      padding-top: 3%;
+
+      .questionSet {
+        border-radius: 30px;
+        margin-bottom: 1%;
+
+        font-family: "Be Vietnam Pro", sans-serif;
+        text-align: start;
+
+        -webkit-box-shadow: none;
+        -moz-box-shadow: none;
+
+        box-shadow: none;
+        padding-top: 1%;
+        padding-bottom: 1%;
+
+        padding-left: 2%;
+        padding-right: 2%;
+
+        .expandIcon{
+          
+        }
+
+        .question {
+          color: #3d3d3d;
+          font-style: normal;
+          font-weight: normal;
+          font-size: 1.3vw;
+
+          
+        }
+        .answer {
+          color: #3d3d3d;
+          line-height: 170%;
+          font-style: normal;
+          font-weight: normal;
+          font-size: 1.2vw;
+        }
+      }
+    }
+    .imageContainer{
+      // background-color: rebeccapurple;
+      height: 25vmin;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      .stickerTag{
+        height: 10vw;
+      }
+    }
+    
+  }
+  .stickerCol1 {
+    height: 35vmin; 
+  }
+}
