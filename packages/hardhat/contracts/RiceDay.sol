@@ -5,10 +5,16 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 import "./ERC721A.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
+import "@openzeppelin/contracts/utils/cryptography/ECDSA.sol";
 
 contract RiceDay is Ownable, ERC721A, ReentrancyGuard {
+    using ECDSA for bytes32;
+
     //total Supply
     uint256 public constant MAX_SUPPLY = 8866;
+
+    address private prepChefSigner;
+    address private execChefSigner;
 
     //sale status variable
     enum SalePhase {
@@ -16,8 +22,11 @@ contract RiceDay is Ownable, ERC721A, ReentrancyGuard {
         PreSale,
         PublicSale
     }
+
     SalePhase public phase = SalePhase.Locked;
     mapping(address => uint8) private _devList;
+    mapping(address => uint8) private _prepAlreadyMint;
+    mapping(address => uint8) private _execAlreadyMint;
 
     string baseURI;
     bool public revealed = true;
@@ -49,13 +58,72 @@ contract RiceDay is Ownable, ERC721A, ReentrancyGuard {
             "Ether value sent is not correct"
         );
         uint256 senderBalance = balanceOf(msg.sender);
-        require(senderBalance <= 10, "cannot request that many"); //erc721 checks how many they can mint at a time
+        require(senderBalance <= 3, "cannot request that many"); //erc721 checks how many they can mint at a time
         _safeMint(msg.sender, numberOfTokens);
     }
 
-    function prepChefMint() external payable callerIsUser {}
+    function prepChefMint(bytes calldata signature)
+        external
+        payable
+        callerIsUser
+    {
+        require(phase == SalePhase.PreSale, "Presale minting not active");
+        require(
+            1 + totalSupply() <= MAX_SUPPLY,
+            "Purchase would exceed max tokens"
+        );
+        require(pricePresale <= msg.value, "Ether value sent is not correct");
 
-    function execChefMint() external payable callerIsUser {}
+        require(
+            prepChefSigner ==
+                keccak256(
+                    abi.encodePacked(
+                        "\x19Ethereum Signed Message:\n32",
+                        bytes32(uint256(uint160(msg.sender)))
+                    )
+                ).recover(signature),
+            "Signer address mismatch."
+        );
+
+        require(_prepAlreadyMint[msg.sender] == 0, "Already minted");
+        _prepAlreadyMint[msg.sender] = 1;
+
+        _safeMint(msg.sender, 1);
+    }
+
+    function execChefMint(uint8 numberOfTokens, bytes calldata signature)
+        external
+        payable
+        callerIsUser
+    {
+        require(phase == SalePhase.PreSale, "Presale minting not active");
+        require(
+            numberOfTokens + totalSupply() <= MAX_SUPPLY,
+            "Purchase would exceed max tokens"
+        );
+        require(numberOfTokens <= 2, "Cannot purchase that many");
+
+        require(
+            execChefSigner ==
+                keccak256(
+                    abi.encodePacked(
+                        "\x19Ethereum Signed Message:\n32",
+                        bytes32(uint256(uint160(msg.sender)))
+                    )
+                ).recover(signature),
+            "Signer address mismatch."
+        );
+
+        require(
+            pricePresale * numberOfTokens <= msg.value,
+            "Ether value sent is not correct"
+        );
+
+        require(_execAlreadyMint[msg.sender] <= 2, "Already minted");
+        _execAlreadyMint[msg.sender] += numberOfTokens;
+
+        _safeMint(msg.sender, numberOfTokens);
+    }
 
     function devMint() external payable callerIsUser {
         require(_devList[msg.sender] > 0, "already claimed");
@@ -77,8 +145,17 @@ contract RiceDay is Ownable, ERC721A, ReentrancyGuard {
     function setPublicPrice(uint256 newPrice) external onlyOwner {
         pricePublic = newPrice;
     }
+
     function setPrivatePrice(uint256 newPrice) external onlyOwner {
         pricePresale = newPrice;
+    }
+
+    function setSigners(address _prepChefSigner, address _execChefSigner)
+        external
+        onlyOwner
+    {
+        prepChefSigner = _prepChefSigner;
+        execChefSigner = _execChefSigner;
     }
 
     // internal
@@ -99,7 +176,7 @@ contract RiceDay is Ownable, ERC721A, ReentrancyGuard {
         baseURI = _newBaseURI;
     }
 
-     address public constant DEVELOPMENT_FUND_ADDRESS =
+    address public constant DEVELOPMENT_FUND_ADDRESS =
         0xB77DF549E859919F0C8d09Dfc22cA1D489a67084;
     address public constant OXY_ADDRESS =
         0x43b5F6D6C1B5c57153578025c76E091D8025C114; // Oxy needs to be updated
@@ -119,13 +196,13 @@ contract RiceDay is Ownable, ERC721A, ReentrancyGuard {
     function withdrawAll() external onlyOwner {
         uint256 balance = address(this).balance;
         require(balance > 0, "Balance is 0");
-        payable(DEVELOPMENT_FUND_ADDRESS).transfer(balance * 5000 / 10000);
-        payable(OXY_ADDRESS).transfer(balance * 1250 / 10000);
-        payable(FOUNDER_ADDRESS_1).transfer(balance * 965 / 10000);
-        payable(FOUNDER_ADDRESS_2).transfer(balance * 965 / 10000);
-        payable(COMMUNITYLEAD_ADDRESS).transfer(balance * 450 / 10000);
-        payable(TECHLEAD_ADDRESS).transfer(balance * 450 / 10000);
-        payable(GENARTIST_ADDRESS).transfer(balance * 600 / 10000);
-        payable(RARITYARTIST_ADDRESS).transfer(balance * 320 / 10000);
+        payable(DEVELOPMENT_FUND_ADDRESS).transfer((balance * 5000) / 10000);
+        payable(OXY_ADDRESS).transfer((balance * 1250) / 10000);
+        payable(FOUNDER_ADDRESS_1).transfer((balance * 965) / 10000);
+        payable(FOUNDER_ADDRESS_2).transfer((balance * 965) / 10000);
+        payable(COMMUNITYLEAD_ADDRESS).transfer((balance * 450) / 10000);
+        payable(TECHLEAD_ADDRESS).transfer((balance * 450) / 10000);
+        payable(GENARTIST_ADDRESS).transfer((balance * 600) / 10000);
+        payable(RARITYARTIST_ADDRESS).transfer((balance * 320) / 10000);
     }
 }

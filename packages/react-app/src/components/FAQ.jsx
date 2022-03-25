@@ -83,7 +83,7 @@ export default function FAQ() {
               <div className="question"> When will the RiceDay NFTs be available for minting?</div>
             </AccordionSummary>
             <AccordionDetails>
-              <div className="answer">We will be minting __ March 2022</div>
+              <div className="answer">We will be minting 4th and 5th April 2022</div>
             </AccordionDetails>
           </Accordion>
           <Accordion

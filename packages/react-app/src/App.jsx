@@ -44,6 +44,7 @@ import {
   MintPage,
   MobileMintPage,
   MobileUnknownPage,
+  AdminPage,
 } from "./components";
 import { NETWORKS, ALCHEMY_KEY } from "./constants";
 import externalContracts from "./contracts/external_contracts";
@@ -335,8 +336,30 @@ function App(props) {
               loadWeb3Modal={loadWeb3Modal}
               web3Modal={web3Modal}
               readContracts={readContracts}
-              writeContracts = {writeContracts}
-              tx = {tx}
+              writeContracts={writeContracts}
+              tx={tx}
+            />
+            <AppBar
+              useBurner={USE_BURNER_WALLET}
+              address={address}
+              localProvider={localProvider}
+              userSigner={userSigner}
+              mainnetProvider={mainnetProvider}
+              price={price}
+              web3Modal={web3Modal}
+              loadWeb3Modal={loadWeb3Modal}
+              logoutOfWeb3Modal={logoutOfWeb3Modal}
+              blockExplorer={blockExplorer}
+            />
+          </Route>
+          <Route path="/projectAlpha">
+            <AdminPage
+              address={address}
+              loadWeb3Modal={loadWeb3Modal}
+              web3Modal={web3Modal}
+              readContracts={readContracts}
+              writeContracts={writeContracts}
+              tx={tx}
             />
             <AppBar
               useBurner={USE_BURNER_WALLET}
@@ -404,7 +427,14 @@ function App(props) {
             />
           </Route>
           <Route path="/projectBeta">
-            <MobileMintPage address={address} loadWeb3Modal={loadWeb3Modal} web3Modal={web3Modal} />
+            <MobileMintPage
+              address={address}
+              loadWeb3Modal={loadWeb3Modal}
+              web3Modal={web3Modal}
+              readContracts={readContracts}
+              writeContracts={writeContracts}
+              tx={tx}
+            />
             <MobileAppbar
               useBurner={USE_BURNER_WALLET}
               address={address}

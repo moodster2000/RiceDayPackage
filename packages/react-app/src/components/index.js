@@ -25,6 +25,7 @@ export { default as Footer } from "./Footer";
 export { default as MobileFooter } from "./mobileFooter";
 export { default as MobileFAQ } from "./mobileFAQ";
 export { default as MobileRoadmap } from "./mobileRoadmap";
+export { default as AdminPage } from "./AdminPage";
 export { default as MobileTeam } from "./mobileTeam";
 export { default as Roadmap } from "./Roadmap";
 export { default as About } from "./About";

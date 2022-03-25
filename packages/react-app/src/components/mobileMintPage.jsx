@@ -4,12 +4,13 @@ import "./mobileMintPage.scss";
 import sadRice from "../unknownPage/sadRice.png";
 import uncleRoger from "../mintingPage/uncleRoger.gif";
 import comboSticker3 from "../stickers/comboSticker3.png";
+import { formatEther, parseEther } from "@ethersproject/units";
 
 import stickerRiceCooker from "../stickers/stickerRiceCooker.png";
 import stickerSushi from "../stickers/stickerSushi.png";
 // displays a page header
 
-export default function MobileMintPage({ address, web3Modal, loadWeb3Modal }) {
+export default function MobileMintPage({ address, web3Modal, loadWeb3Modal,  readContracts, writeContracts, tx  }) {
   const [saleState, setSaleState] = useState("presaleActive");
   const [quantity, setQuantity] = useState(0);
   let history = useHistory();
@@ -17,6 +18,36 @@ export default function MobileMintPage({ address, web3Modal, loadWeb3Modal }) {
   useEffect(() => {
     setRoute(window.location.pathname);
   }, [setRoute]);
+
+  const publicMint = async () => {
+    console.log("hello");
+    const ethAmount = 0.15;
+    const result = tx(
+      writeContracts.RiceDay.publicSaleMint(quantity, {
+        value: parseEther(ethAmount.toString()),
+      }),
+      update => {
+        console.log("📡 Transaction Update:", update.status);
+        if (update && (update.status === "confirmed" || update.status === 1)) {
+          console.log(" 🍾 Transaction " + update.hash + " finished!");
+          console.log(
+            " ⛽️ " +
+              update.gasUsed +
+              "/" +
+              (update.gasLimit || update.gas) +
+              " @ " +
+              parseFloat(update.gasPrice) / 1000000000 +
+              " gwei",
+          );
+        }
+        if (update.status == "pending") {
+          setSaleState("loading");
+        } else if (update.status == "confirmed") {
+          setSaleState("congrats");
+        }
+      },
+    );
+  };
 
   var saleComp;
   if (saleState == "comingSoon") {
@@ -129,7 +160,7 @@ export default function MobileMintPage({ address, web3Modal, loadWeb3Modal }) {
           </div>
         </div>
         {web3Modal.cachedProvider ? (
-          <div className="primaryButton">Mint a Rice!</div>
+          <div onClick={() => publicMint()} className="primaryButton">Mint a Rice!</div>
         ) : (
           <div onClick={loadWeb3Modal} className="primaryButton">
             Connect Wallet
@@ -203,7 +234,7 @@ export default function MobileMintPage({ address, web3Modal, loadWeb3Modal }) {
         </div>
       </div>
     );
-  } else if (saleState == "success") {
+  } else if (saleState == "loading") {
     //not finished
     saleComp = (
       <div className="mobileMintPage">
