@@ -4401,9 +4401,10 @@ async function signWith(signer, addresses) {
  
   const messages = {};
   for (let i = 0; i < addresses.length; i++) {
-    const message = `0x000000000000000000000000${addresses[i].substring(2)}`;
+    const addr = ethers.utils.getAddress(addresses[i])
+    const message = `0x000000000000000000000000${addr.substring(2)}`;
     const signed = await signer.signMessage(ethers.utils.arrayify(message));
-    messages[addresses[i]] = signed;
+    messages[addr] = signed;
   }
   return messages;
 }
