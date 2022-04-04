@@ -5,26 +5,133 @@ import sadRice from "../unknownPage/sadRice.png";
 import uncleRoger from "../mintingPage/uncleRoger.gif";
 import comboSticker3 from "../stickers/comboSticker3.png";
 import { formatEther, parseEther } from "@ethersproject/units";
-
+import PrepChefAdds from "../RLAddress/prepSigs.json";
+import ExecChefAdds from "../RLAddress/execSigs.json";
 import stickerRiceCooker from "../stickers/stickerRiceCooker.png";
 import stickerSushi from "../stickers/stickerSushi.png";
+import {
+  useContractReader,
+} from "eth-hooks";
 // displays a page header
 
 export default function MobileMintPage({ address, web3Modal, loadWeb3Modal,  readContracts, writeContracts, tx  }) {
-  const [saleState, setSaleState] = useState("presaleActive");
+  const [saleState, setSaleState] = useState("publicActive");
   const [quantity, setQuantity] = useState(0);
   let history = useHistory();
   const [route, setRoute] = useState();
+  const [key, setKey] = useState("");
+  const [canMint, setCanMint] = useState(0);
+  const [totalSupply, setTotalSupply] = useState(0);
+  const [currentSupply, setCurrentSupply] = useState(0);
+  const [group, setGroup] = useState();
   useEffect(() => {
     setRoute(window.location.pathname);
   }, [setRoute]);
+  const maxSupply = useContractReader(readContracts, "RiceDay", "MAX_SUPPLY");
+  const current = useContractReader(readContracts, "RiceDay", "totalSupply");
+  const claimed = useContractReader(readContracts, "RiceDay", "balanceOf", [address]);
+  useEffect(() => {
+    if (maxSupply) {
+      setTotalSupply(maxSupply.toString());
+    }
+  }, [maxSupply]);
+  useEffect(() => {
+    if (current) {
+      setCurrentSupply(current.toString());
+    }
+  }, [current]);
 
+  useEffect(() => {
+    if (address != "") {
+      if (ExecChefAdds[address] != undefined) {
+        if (claimed == 0) {
+          setKey(ExecChefAdds[address]);
+          setCanMint(2);
+        } else if (claimed == 1) {
+          setKey(ExecChefAdds[address]);
+          setCanMint(1);
+        } else if (claimed == 2) {
+          setCanMint(0);
+        }
+        setGroup("exec");  
+      } else if (PrepChefAdds[address] != undefined) {
+        if (claimed != 1) {
+          setKey(PrepChefAdds[address]);
+          setCanMint(1);
+        } else if (claimed == 1) {
+          setCanMint(0);
+        }
+        setGroup("prep"); 
+      }
+    }
+  }, [address, claimed]);
+
+  const prepChefMint = async () => {
+    const ethAmount = 0.088;
+    const result = tx(
+      writeContracts.RiceDay.prepChefMint(key, {
+        value: parseEther(ethAmount.toString()),
+      }),
+      update => {
+        console.log("📡 Transaction Update:", update.status);
+        if (update && (update.status === "confirmed" || update.status === 1)) {
+          console.log(" 🍾 Transaction " + update.hash + " finished!");
+          console.log(
+            " ⛽️ " +
+              update.gasUsed +
+              "/" +
+              (update.gasLimit || update.gas) +
+              " @ " +
+              parseFloat(update.gasPrice) / 1000000000 +
+              " gwei",
+          );
+        }
+        if (update.status == "pending") {
+          setSaleState("loading");
+        } else if (update.status == "confirmed") {
+          setSaleState("congrats");
+        }
+      },
+    );
+  };
+  const execChefMint = async () => {
+    const ethAmount = 0.088 * quantity;
+    const result = tx(
+      writeContracts.RiceDay.execChefMint(quantity, key, {
+        value: parseEther(ethAmount.toString()),
+      }),
+      update => {
+        console.log("📡 Transaction Update:", update.status);
+        if (update && (update.status === "confirmed" || update.status === 1)) {
+          console.log(" 🍾 Transaction " + update.hash + " finished!");
+          console.log(
+            " ⛽️ " +
+              update.gasUsed +
+              "/" +
+              (update.gasLimit || update.gas) +
+              " @ " +
+              parseFloat(update.gasPrice) / 1000000000 +
+              " gwei",
+          );
+        }
+        if (update.status == "pending") {
+          setSaleState("loading");
+        } else if (update.status == "confirmed") {
+          setSaleState("congrats");
+        }
+      },
+    );
+  };
   const publicMint = async () => {
-    console.log("hello");
-    const ethAmount = 0.15;
+    const ethAmount = 0.088 * quantity;
+    const gas = await writeContracts.RiceDay.estimateGas.publicSaleMint(quantity, {
+      value: parseEther(ethAmount.toString()),
+    });
+    var gasBuffered = gas.mul(1200).div(1000);
     const result = tx(
       writeContracts.RiceDay.publicSaleMint(quantity, {
         value: parseEther(ethAmount.toString()),
+        gasLimit: gasBuffered
       }),
       update => {
         console.log("📡 Transaction Update:", update.status);
@@ -50,6 +157,40 @@ export default function MobileMintPage({ address, web3Modal, loadWeb3Modal,  rea
   };
 
   var saleComp;
+  var RLButton;
+  if (canMint == 0) {
+    RLButton = (
+      <div style={{display: "flex", flexDirection: "column", alignItems: "center"}}>
+        <div style={{ marginTop: "2%" }} className="mobileSubHeader">
+          Thank you for your support!
+          <br />
+          If you have a problem, please open a ticket on our Discord.
+        </div>
+        <div
+          onClick={() => {
+            history.push("/");
+            setRoute("/");
+          }}
+          style = {{width: "65%"}}
+          className="primaryButton"
+        >
+          Back to HomePage
+        </div>
+      </div>
+    );
+  } else if (canMint == 1) {
+    RLButton = (
+      <div onClick={quantity > 0 ?() => prepChefMint():console.log("")} className="primaryButton">
+        Mint a Rice!
+      </div>
+    );
+  } else if (canMint == 2) {
+    RLButton = (
+      <div onClick={quantity > 0 ?() => execChefMint():console.log("")} className="primaryButton">
+        Mint a Rice!
+      </div>
+    );
+  }
   if (saleState == "comingSoon") {
     saleComp = (
       <div className="mobileMintPage">
@@ -68,12 +209,13 @@ export default function MobileMintPage({ address, web3Modal, loadWeb3Modal,  rea
         {!web3Modal.cachedProvider ? (
           <div className="mobileSubHeader">You need to connect to your wallet first!</div>
         ) : (
-          <div className="mobileSubHeader">You can mint X Rice</div>
+          <div className="mobileSubHeader">You can mint {canMint} Rice</div>
         )}
         <div className="mobHeader1">Presale is active now!</div>
-        <div style={{ color: "#A0A0A0" }} className="mobBody3">
+        {canMint > 0 ? (<div style={{ color: "#A0A0A0" }} className="mobBody3">
           Number of Rice you want to mint:
-        </div>
+        </div>):<div/>}
+        {canMint > 0 ? (
         <div className="toggleQuantityBox">
           <div
             style={{ backgroundColor: quantity == 1 ? "#3D3D3D" : "" }}
@@ -85,29 +227,29 @@ export default function MobileMintPage({ address, web3Modal, loadWeb3Modal,  rea
           </div>
           <div
             style={{ backgroundColor: quantity == 2 ? "#3D3D3D" : "" }}
-            onClick={() => (quantity != 2 ? setQuantity(2) : setQuantity(0))}
+            onClick={canMint > 1 ? () => (quantity != 2 ? setQuantity(2) : setQuantity(0)) : () => {}}
             className="columnQuant"
           >
-            <div className={quantity == 2 ? "activeButton" : "button"} />
-            <div className="mobQuantityTitle">2 Rice</div>
+            <div style={{ borderColor: canMint < 2 ? "#A0A0A0" : "" }} className={quantity == 2 ? "activeButton" : "button"} />
+            <div style={{ color: canMint < 2 ? "#A0A0A0" : "" }}  className="mobQuantityTitle">2 Rice</div>
           </div>
           <div
             style={{ backgroundColor: quantity == 3 ? "#3D3D3D" : "" }}
-            onClick={() => (quantity != 3 ? setQuantity(3) : setQuantity(0))}
+            onClick={canMint > 2 ? () => (quantity != 3 ? setQuantity(3) : setQuantity(0)) : () => {}}
             className="columnQuant"
           >
-            <div className={quantity == 3 ? "activeButton" : "button"} />
-            <div className="mobQuantityTitle">3 Rice</div>
+            <div style={{ borderColor: canMint < 3 ? "#A0A0A0" : "" }} className={quantity == 3 ? "activeButton" : "button"} />
+            <div style={{ color: canMint < 3 ? "#A0A0A0" : "" }} className="mobQuantityTitle">3 Rice</div>
           </div>
-        </div>
+        </div>):<div/>}
         {web3Modal.cachedProvider ? (
-          <div className="primaryButton">Mint a Rice!</div>
+          RLButton
         ) : (
           <div onClick={loadWeb3Modal} className="primaryButton">
             Connect Wallet
           </div>
         )}
-        <div className="mobSupplyText">x/y Minted</div>
+        <div className="mobSupplyText">{currentSupply}/{totalSupply} Minted</div>
         <div className="pictureContainer">
           <img style={{ borderRadius: "50px" }} src={uncleRoger} className="sideGraphic" />
           <div className="textBox">
@@ -160,13 +302,13 @@ export default function MobileMintPage({ address, web3Modal, loadWeb3Modal,  rea
           </div>
         </div>
         {web3Modal.cachedProvider ? (
-          <div onClick={() => publicMint()} className="primaryButton">Mint a Rice!</div>
+          <div onClick={quantity > 0 ?() => publicMint():console.log("")} className="primaryButton">Mint a Rice!</div>
         ) : (
           <div onClick={loadWeb3Modal} className="primaryButton">
             Connect Wallet
           </div>
         )}
-        <div className="mobSupplyText">x/y Minted</div>
+        <div className="mobSupplyText">{currentSupply}/{totalSupply} Minted</div>
         <div className="pictureContainer">
           <img style={{ borderRadius: "50px" }} src={uncleRoger} className="sideGraphic" />
           <div className="textBox">
@@ -194,7 +336,7 @@ export default function MobileMintPage({ address, web3Modal, loadWeb3Modal,  rea
         >
           Back to Homepage
         </div>
-        <div className="mobSupplyText">x/y Minted</div>
+        <div className="mobSupplyText">{currentSupply}/{totalSupply} Minted</div>
         <div className="pictureContainer">
           <img style={{ borderRadius: "50px" }} src={uncleRoger} className="sideGraphic" />
           <div className="textBox">
@@ -224,7 +366,7 @@ export default function MobileMintPage({ address, web3Modal, loadWeb3Modal,  rea
         >
           Refresh
         </div>
-        <div className="mobSupplyText">x/y Minted</div>
+        <div className="mobSupplyText">{currentSupply}/{totalSupply} Minted</div>
         <div className="pictureContainer">
           <img style={{ borderRadius: "50px" }} src={uncleRoger} className="sideGraphic" />
           <div className="textBox">
@@ -285,7 +427,7 @@ export default function MobileMintPage({ address, web3Modal, loadWeb3Modal,  rea
             Connect Wallet
           </div>
         )}
-        <div className="mobSupplyText">x/y Minted</div>
+        <div className="mobSupplyText">{currentSupply}/{totalSupply} Minted</div>
         <div className="pictureContainer">
           <img style={{ borderRadius: "50px" }} src={uncleRoger} className="sideGraphic" />
           <div className="textBox">

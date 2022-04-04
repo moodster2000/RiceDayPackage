@@ -26,7 +26,7 @@ export default function HomePage({ address, web3Modal }) {
 
   useEffect(() => {
     if (saleState == "wlComing" && web3Modal) {
-      var countDownDate = new Date("April 4, 2022 16:00:00").getTime();
+      var countDownDate = new Date("April 4, 2022 11:00:00 GMT-04:00").getTime();
       var now = new Date().getTime();
       var distance = countDownDate - now;
 
@@ -81,7 +81,7 @@ export default function HomePage({ address, web3Modal }) {
         </div>,
       );
     } else if (saleState == "wlClosedbutPsComing" && web3Modal) {
-      var countDownDate = new Date("March 5, 2022 15:00:00").getTime();
+      var countDownDate = new Date("April 5, 2022 11:00:00 GMT-04:00").getTime();      
       var now = new Date().getTime();
       var distance = countDownDate - now;
 

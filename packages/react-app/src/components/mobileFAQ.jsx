@@ -69,7 +69,7 @@ export default function MobileFAQ() {
               <div className="question">What is the mint price?</div>
             </AccordionSummary>
             <AccordionDetails>
-              <div className="answer">RiceList mint will cost __ and Public mint will cost __</div>
+              <div className="answer">0.088 ETH</div>
             </AccordionDetails>
           </Accordion>
           <Accordion

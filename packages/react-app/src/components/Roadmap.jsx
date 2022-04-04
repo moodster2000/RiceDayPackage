@@ -2,7 +2,10 @@ import React from "react";
 import "./Roadmap.scss";
 import comboSticker5 from "../stickers/comboSticker5.png";
 import comboSticker7 from "../stickers/comboSticker7.png";
-import aboutGraphic from "../aboutPage/aboutGraphic.jpg";
+import city1 from "../roadmapPage/City1.jpg";
+import city2 from "../roadmapPage/City2.jpg";
+import city3 from "../roadmapPage/City3.jpg";
+import linkIcon from "../logo/linksIcon.svg";
 import friedRice from "../stickers/stickerFriedRice.png";
 import heartSticker from "../stickers/stickerRiceHead.png";
 
@@ -79,49 +82,66 @@ export default function Roadmap() {
         <div className="imageContainer">
           <img src={friedRice} className="stickerDet" />
         </div>
+        {/*restaurant conent */}
+        <div className="restaurantContent">
+          <div className="webTitle">Partnership Restaurant</div>
+          <div className="contentRow">
+            <div className="subText">
+              We are partnering with restaurants around the world with the aim of creating of a global foodie community.
+            </div>
+            <a
+              target="_blank"
+              href="https://drive.google.com/file/d/1fbETttNt5pyOHq4bfL0Ay36C2yQKcvSS/view"
+              className="primaryButton"
+            >
+              Work with Us!
+            </a>
+          </div>
+          <div className="restaurants">
+            <div className="restaurant">
+              <div className="restaurantContainer">
+                <a target="_blank" href="https://www.instagram.com/lolaxiki/" className="link">
+                  <img src={linkIcon} className="imageInside" />
+                </a>
+                <img src={city1} className="restaurantImage" />
+                <div className="restaurantText">
+                  <div className="headerRes">LOLA X IKI </div>
+                  <div className="subHeaderRes">Berlin, Germany</div>
+                </div>
+              </div>
+            </div>
+            <div className="restaurant">
+              <div className="restaurantContainer">
+                <a target="_blank" href="https://instagram.com/cafearoma.ph?utm_medium=copy_link" className="link">
+                  <img src={linkIcon} className="imageInside" />
+                </a>
+                <img src={city2} className="restaurantImage" />
+                <div className="restaurantText">
+                  <div className="headerRes">Aroma.</div>
+                  <div className="subHeaderRes">Iloilo, Philippines</div>
+                </div>
+              </div>
+            </div>
+            <div className="restaurant">
+              <div className="restaurantContainer">
+                <a target="_blank" href="https://www.facebook.com/oliviaskitchenandislandbrew/" className="link">
+                  <img src={linkIcon} className="imageInside" />
+                </a>
+                <img src={city3} className="restaurantImage" />
+                <div className="restaurantText">
+                  <div className="headerRes">Olivia's Garden</div>
+                  <div className="subHeaderRes">{`Guimaras, Philippines & Iloilo, Philippines`}</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="altImageContainer">
+          <img src={heartSticker} className="stickerDet" />
+        </div>
       </div>
       <img src={comboSticker7} className="stickerCol1" />
     </div>
   );
 }
-// {<div className="restaurantContent">
-// <div className="webTitle">Partnership Restaurant</div>
-// <div className="contentRow">
-//   <div className="subText">
-//     We are partnering with restaurants around the world with the aim of creating of a global foodie community.
-//   </div>
-//   <a
-//     target="_blank"
-//     href="https://drive.google.com/file/d/1fbETttNt5pyOHq4bfL0Ay36C2yQKcvSS/view"
-//     className="primaryButton"
-//   >
-//     Work with Us!
-//   </a>
-// </div>
-// <div className="restaurants">
-//   <div className="restaurant">
-//     <img src={aboutGraphic} className="restaurantImage" />
-//     <div className="locationBox">
-//       <div className="title2">New York City</div>
-//       <div className="body2">USA</div>
-//     </div>
-//   </div>
-//   <div className="restaurant">
-//     <img src={aboutGraphic} className="restaurantImage" />
-//     <div className="locationBox">
-//       <div className="title2">Sai Gon</div>
-//       <div className="body2">Vietnam</div>
-//     </div>
-//   </div>
-//   <div className="restaurant">
-//     <img src={aboutGraphic} className="restaurantImage" />
-//     <div className="locationBox">
-//       <div className="title2">Sai Gon</div>
-//       <div className="body2">Vietnam</div>
-//     </div>
-//   </div>
-// </div>
-// </div>
-// <div className="altImageContainer">
-// <img src={heartSticker} className="stickerDet" />
-// </div>}
+// {}

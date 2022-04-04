@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from "react";
 import "./About.scss";
-import aboutBanner from "../aboutPage/aboutBanner.jpg";
+import aboutBanner from "../aboutPage/aboutBanner.png";
 import aboutGraphic from "../aboutPage/aboutGraphic.jpg";
 import hotSpotArt from "../aboutPage/hotSpotArt.png";
 
@@ -44,7 +44,7 @@ export default function About() {
               Supply: 8866
               <br />
               <br />
-              Price: TBA
+              Price: 0.088 ETH
             </div>
           </div>
           <img src={ndAboutGraphic} className="sideGraphic" />

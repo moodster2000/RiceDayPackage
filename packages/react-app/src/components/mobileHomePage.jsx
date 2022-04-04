@@ -14,10 +14,17 @@ import backgroundImage from "../background.png";
 import backgroundVideo from "../backgroundVideo.mp4";
 import MusicPlayer from "./MusicPlayer.jsx";
 import mobileBackground from "../mobileBackground.png";
+import { BrowserRouter, Switch, Route, Link, useHistory, withRouter, Redirect } from "react-router-dom";
 
 export default function MobileHomePage({ address, web3Modal }) {
   const [saleState, setSaleState] = useState("wlComing");
   const [saleTitle, setSaleTitle] = useState();
+  let history = useHistory();
+  const [route, setRoute] = useState();
+  const [group, setGroup] = useState();
+  useEffect(() => {
+    setRoute(window.location.pathname);
+  }, [setRoute]);
   // if (saleState == "wlComing" && web3Modal) {
   //
   //   setSaleTitle(
@@ -106,7 +113,7 @@ export default function MobileHomePage({ address, web3Modal }) {
   //     </div>,
   //   );
   // }
-  var countDownDate = new Date("April 4, 2022 16:00:00").getTime();
+  var countDownDate = new Date("April 4, 2022 11:00:00 GMT-04:00").getTime();
   var now = new Date().getTime();
   var distance = countDownDate - now;
 
@@ -153,7 +160,10 @@ export default function MobileHomePage({ address, web3Modal }) {
         {/* //need to check if connected */}
         {!web3Modal.cachedProvider ? <div className="body2">You need to connect to your Wallet first!</div> : <div />}
         {web3Modal.cachedProvider && seconds <= 0 && (days <= 0) & (hours <= 0) && minutes <= 0 ? (
-          <div className="mintButton">Mint a Rice!</div>
+          <div onClick={() => {
+            history.push(`/minting`);
+            setRoute(`/minting`);
+          }} className="mintButton">Mint a Rice!</div>
         ) : (
           <div></div>
         )}

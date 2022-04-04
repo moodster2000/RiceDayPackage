@@ -45,6 +45,7 @@ import {
   MobileMintPage,
   MobileUnknownPage,
   AdminPage,
+  FreeMint
 } from "./components";
 import { NETWORKS, ALCHEMY_KEY } from "./constants";
 import externalContracts from "./contracts/external_contracts";
@@ -90,7 +91,7 @@ const { ethers } = require("ethers");
 */
 
 /// 📡 What chain are your contracts deployed to?
-const initialNetwork = NETWORKS.localhost; // <------- select your target frontend network (localhost, rinkeby, xdai, mainnet)
+const initialNetwork = NETWORKS.mainnet; // <------- select your target frontend network (localhost, rinkeby, xdai, mainnet)
 
 // 😬 Sorry for all the console logging
 const DEBUG = true;
@@ -115,7 +116,7 @@ function App(props) {
 
   const [injectedProvider, setInjectedProvider] = useState();
   const [address, setAddress] = useState();
-  const [selectedNetwork, setSelectedNetwork] = useState(networkOptions[2]);
+  const [selectedNetwork, setSelectedNetwork] = useState(networkOptions[1]);
   const location = useLocation();
 
   //audio Controls
@@ -330,8 +331,30 @@ function App(props) {
               blockExplorer={blockExplorer}
             />
           </Route>
-          <Route path="/projectBeta">
+          <Route path="/minting">
             <MintPage
+              address={address}
+              loadWeb3Modal={loadWeb3Modal}
+              web3Modal={web3Modal}
+              readContracts={readContracts}
+              writeContracts={writeContracts}
+              tx={tx}
+            />
+            <AppBar
+              useBurner={USE_BURNER_WALLET}
+              address={address}
+              localProvider={localProvider}
+              userSigner={userSigner}
+              mainnetProvider={mainnetProvider}
+              price={price}
+              web3Modal={web3Modal}
+              loadWeb3Modal={loadWeb3Modal}
+              logoutOfWeb3Modal={logoutOfWeb3Modal}
+              blockExplorer={blockExplorer}
+            />
+          </Route>
+          <Route path="/freeMint">
+            <FreeMint
               address={address}
               loadWeb3Modal={loadWeb3Modal}
               web3Modal={web3Modal}
@@ -426,7 +449,7 @@ function App(props) {
               blockExplorer={blockExplorer}
             />
           </Route>
-          <Route path="/projectBeta">
+          <Route path="/minting">
             <MobileMintPage
               address={address}
               loadWeb3Modal={loadWeb3Modal}

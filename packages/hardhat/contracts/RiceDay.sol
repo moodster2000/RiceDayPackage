@@ -13,6 +13,7 @@ contract RiceDay is Ownable, ERC721A, ReentrancyGuard {
     //total Supply
     uint256 public constant MAX_SUPPLY = 8866;
 
+    //signer variables
     address private prepChefSigner;
     address private execChefSigner;
 
@@ -22,16 +23,18 @@ contract RiceDay is Ownable, ERC721A, ReentrancyGuard {
         PreSale,
         PublicSale
     }
-
     SalePhase public phase = SalePhase.Locked;
-    mapping(address => uint8) private _devList;
-    mapping(address => uint8) private _prepAlreadyMint;
-    mapping(address => uint8) private _execAlreadyMint;
 
+    //ricelist variables
+    mapping(address => uint8) private _devList;
+    mapping(address => uint256) private _prepAlreadyMint;
+    mapping(address => uint256) private _execAlreadyMint;
+
+    //base URI
     string baseURI;
-    bool public revealed = true;
-    uint256 public pricePublic = 0.15 ether;
-    uint256 public pricePresale = 0.125 ether;
+
+    //price
+    uint256 public priceRiceDay = 0.088 ether;
 
     constructor() ERC721A("RiceDay", "RICE", 3, 8866) {}
 
@@ -40,7 +43,8 @@ contract RiceDay is Ownable, ERC721A, ReentrancyGuard {
         _;
     }
 
-    function publicSaleMint(uint8 numberOfTokens)
+    //mint functions
+    function publicSaleMint(uint256 numberOfTokens)
         external
         payable
         callerIsUser
@@ -54,7 +58,7 @@ contract RiceDay is Ownable, ERC721A, ReentrancyGuard {
             "Purchase would exceed max tokens"
         );
         require(
-            pricePublic * numberOfTokens <= msg.value,
+            priceRiceDay * numberOfTokens <= msg.value,
             "Ether value sent is not correct"
         );
         uint256 senderBalance = balanceOf(msg.sender);
@@ -72,7 +76,7 @@ contract RiceDay is Ownable, ERC721A, ReentrancyGuard {
             1 + totalSupply() <= MAX_SUPPLY,
             "Purchase would exceed max tokens"
         );
-        require(pricePresale <= msg.value, "Ether value sent is not correct");
+        require(priceRiceDay <= msg.value, "Ether value sent is not correct");
 
         require(
             prepChefSigner ==
@@ -86,12 +90,12 @@ contract RiceDay is Ownable, ERC721A, ReentrancyGuard {
         );
 
         require(_prepAlreadyMint[msg.sender] == 0, "Already minted");
-        _prepAlreadyMint[msg.sender] = 1;
 
         _safeMint(msg.sender, 1);
+        _prepAlreadyMint[msg.sender] = 1;
     }
 
-    function execChefMint(uint8 numberOfTokens, bytes calldata signature)
+    function execChefMint(uint256 numberOfTokens, bytes calldata signature)
         external
         payable
         callerIsUser
@@ -115,14 +119,15 @@ contract RiceDay is Ownable, ERC721A, ReentrancyGuard {
         );
 
         require(
-            pricePresale * numberOfTokens <= msg.value,
+            priceRiceDay * numberOfTokens <= msg.value,
             "Ether value sent is not correct"
         );
 
-        require(_execAlreadyMint[msg.sender] <= 2, "Already minted");
-        _execAlreadyMint[msg.sender] += numberOfTokens;
+        require(_execAlreadyMint[msg.sender] + numberOfTokens <= 2, "Already minted");
 
         _safeMint(msg.sender, numberOfTokens);
+
+        _execAlreadyMint[msg.sender] += numberOfTokens;
     }
 
     function devMint() external payable callerIsUser {
@@ -142,14 +147,16 @@ contract RiceDay is Ownable, ERC721A, ReentrancyGuard {
     }
 
     //set Price
-    function setPublicPrice(uint256 newPrice) external onlyOwner {
-        pricePublic = newPrice;
+    function setRiceDayPrice(uint256 newPrice) external onlyOwner {
+        priceRiceDay = newPrice;
     }
 
-    function setPrivatePrice(uint256 newPrice) external onlyOwner {
-        pricePresale = newPrice;
+    //set reveal
+    function setRiceDayReveal(uint8 reveal) external onlyOwner {
+        revealed = reveal;
     }
 
+    //set signers
     function setSigners(address _prepChefSigner, address _execChefSigner)
         external
         onlyOwner
@@ -158,11 +165,12 @@ contract RiceDay is Ownable, ERC721A, ReentrancyGuard {
         execChefSigner = _execChefSigner;
     }
 
-    // internal
+    // internal read base uri
     function _baseURI() internal view virtual override returns (string memory) {
         return baseURI;
     }
 
+    //setting free mints
     function setDevMint(address[] calldata _addresses, uint8 amount)
         public
         onlyOwner
@@ -172,18 +180,19 @@ contract RiceDay is Ownable, ERC721A, ReentrancyGuard {
         }
     }
 
+    //setting base uri
     function setBaseURI(string memory _newBaseURI) public onlyOwner {
         baseURI = _newBaseURI;
     }
 
-    address public constant DEVELOPMENT_FUND_ADDRESS =
-        0xB77DF549E859919F0C8d09Dfc22cA1D489a67084;
+    address public constant DEVELOPMENT_FUND_ADDRESS = 
+        0x202e68E759282EAeD7673dB6E24889cf1b6F85b7; //Dev Fund
     address public constant OXY_ADDRESS =
-        0x43b5F6D6C1B5c57153578025c76E091D8025C114; // Oxy needs to be updated
+        0xc73ab340a7d523EC7b1b71fE3d3494F94283b4B1; // Oxy
     address public constant FOUNDER_ADDRESS_1 =
         0x4D343925Df00700c4838112f22EbA49A0D4D07ae; // Nam
     address public constant FOUNDER_ADDRESS_2 =
-        0xC929b6bD739a8564BcB35e978Afe4ffF5b6c3cEF; // Giang needs to be updated
+        0x73248B42AB2cBb2008aE52fa7E14789CA40Cb279; // Giang
     address public constant COMMUNITYLEAD_ADDRESS =
         0x5774883C9dDAB26954d0D2CABeA2F97dbEe7CC1a; // Vi
     address public constant TECHLEAD_ADDRESS =

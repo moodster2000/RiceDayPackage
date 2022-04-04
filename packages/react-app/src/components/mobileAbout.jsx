@@ -1,6 +1,6 @@
 import React from "react";
 import "./mobileAbout.scss";
-import aboutBanner from "../aboutPage/aboutBanner.jpg";
+import aboutBanner from "../aboutPage/aboutBanner.png";
 import aboutGraphic from "../aboutPage/aboutGraphic.jpg";
 import ndAboutGraphic from "../aboutPage/2ndAboutGraphic.gif";
 import hotSpotArt from "../aboutPage/hotSpotArt.png";
@@ -26,7 +26,7 @@ export default function MobileAbout() {
           <br />
           Supply: 8866
           <br />
-          Price: __
+          Price: 0.088 ETH
         </div>
         <div className="imageContainer">
           <img src={stickerNoodles} className="inBetweenSticker" />

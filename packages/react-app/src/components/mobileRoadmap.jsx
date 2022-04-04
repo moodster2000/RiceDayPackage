@@ -2,12 +2,15 @@ import React from "react";
 import "./mobileRoadmap.scss";
 import comboSticker5 from "../stickers/comboSticker3.png";
 import comboSticker7 from "../stickers/comboSticker4.png";
-import aboutGraphic from "../aboutPage/aboutGraphic.jpg";
+import city1 from "../roadmapPage/City1.jpg";
+import city2 from "../roadmapPage/City2.jpg";
+import city3 from "../roadmapPage/City3.jpg";
 import { CarouselProvider, Slider, Slide, ButtonBack, ButtonNext } from "pure-react-carousel";
 import "pure-react-carousel/dist/react-carousel.es.css";
 import friedRice from "../stickers/stickerFriedRice.png";
 import heartSticker from "../stickers/stickerRiceHead.png";
 import chungCake from "../stickers/stickerChungCake.png";
+import linkIcon from "../logo/linksIcon.svg";
 
 export default function MobileRoadmap() {
   return (
@@ -84,12 +87,75 @@ export default function MobileRoadmap() {
         <div className="imageContainer">
           <img src={friedRice} className="inBetweenSticker" />
         </div>
+        <div className="restaurantContent">
+          <div className="mobTitle">Partnership Restaurant</div>
+          <div className="mobSubText">
+            We are partnering with restaurants around the world with the aim of creating of a global foodie community.
+          </div>
+          <CarouselProvider
+            naturalSlideWidth={100}
+            naturalSlideHeight={50}
+            className="slides"
+            totalSlides={3}
+            visibleSlides={1}
+            currentSlide={1}
+            infinite
+          >
+            <Slider>
+              <Slide className="slide" index={0}>
+                <a target="_blank" href="https://www.instagram.com/lolaxiki/" className="link">
+                  <img src={linkIcon} className="imageInside" />
+                </a>
+                <img src={city1} className="restaurantImage" />
+                <div className="locationBox">
+                <div className="title2">LOLA X IKI</div>
+                  <div className="body2">Berlin, Germany</div>
+                </div>
+              </Slide>
+              <Slide className="slide" index={1}>
+                <a target="_blank"
+                href="https://www.instagram.com/cafearoma.ph/"
+                className="link">
+                  <img src={linkIcon} className="imageInside" />
+                </a>
+                <img src={city2} className="restaurantImage" />
+
+                <div className="locationBox">
+                  <div className="title2">Aroma.</div>
+                  <div className="body2">Iloilo, Philippines</div>
+                </div>
+              </Slide>
+              <Slide className="slide" index={2}>
+              <a target="_blank"
+                href="https://www.instagram.com/oliviaskitchen_islandbrew/"
+                className="link">
+                  <img src={linkIcon} className="imageInside" />
+                </a>
+                <img src={city3} className="restaurantImage" />
+                <div className="locationBox">
+                  <div className="title2">Olivia's Garden</div>
+                  <div className="body2">{`Guimaras, Philippines & Iloilo, Philippines`}</div>
+                </div>
+              </Slide>
+            </Slider>
+          </CarouselProvider>
+          <a
+            target="_blank"
+            href="https://drive.google.com/file/d/1fbETttNt5pyOHq4bfL0Ay36C2yQKcvSS/view"
+            className="primaryButton"
+          >
+            Work with Us!
+          </a>
+        </div>
+        <div className="imageContainer">
+          <img src={heartSticker} className="inBetweenSticker" />
+        </div>
       </div>
     </div>
   );
 }
 
-  /* <div className="restaurants">
+/* <div className="restaurants">
             <div className="restaurant">
               <img src={aboutGraphic} className="restaurantImage" />
               <div className="locationBox">
@@ -113,52 +179,3 @@ export default function MobileRoadmap() {
             </div>
           </div> */
 // }
-// <div className="restaurantContent">
-//           <div className="mobTitle">Partnership Restaurant</div>
-//           <div className="mobSubText">
-//             We are partnering with restaurants around the world with the aim of creating of a global foodie community.
-//           </div>
-//           <CarouselProvider
-//             naturalSlideWidth={100}
-//             naturalSlideHeight={50}
-//             className="slides"
-//             totalSlides={3}
-//             visibleSlides={1}
-//             currentSlide={1}
-//             infinite
-//           >
-//             <Slider>
-//               <Slide className="slide" index={0}>
-//                 <img src={aboutGraphic} className="restaurantImage" />
-//                 <div className="locationBox">
-//                   <div className="title2">Sai Gon</div>
-//                   <div className="body2">Vietnam</div>
-//                 </div>
-//               </Slide>
-//               <Slide className="slide" index={1}>
-//                 <img src={aboutGraphic} className="restaurantImage" />
-//                 <div className="locationBox">
-//                   <div className="title2">Sai Gon</div>
-//                   <div className="body2">Vietnam</div>
-//                 </div>
-//               </Slide>
-//               <Slide className="slide" index={2}>
-//                 <img src={aboutGraphic} className="restaurantImage" />
-//                 <div className="locationBox">
-//                   <div className="title2">Sai Gon</div>
-//                   <div className="body2">Vietnam</div>
-//                 </div>
-//               </Slide>
-//             </Slider>
-//           </CarouselProvider>
-//           <a
-//             target="_blank"
-//             href="https://drive.google.com/file/d/1fbETttNt5pyOHq4bfL0Ay36C2yQKcvSS/view"
-//             className="primaryButton"
-//           >
-//             Work with Us!
-//           </a>
-//         </div>
-//         <div className="imageContainer">
-//           <img src={heartSticker} className="inBetweenSticker" />
-//         </div>

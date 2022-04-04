@@ -208,7 +208,7 @@ export default function MobileTeam() {
                 Even rocket engines need 0xygen
               </div>
               <div style={{ marginTop: "3%" }} className="mobileBodyText">
-                0xygen Labs is founded by Rei and his team behind NANOPASS, nanovers HQ, and the upcoming Phantom
+                0xygen Labs is founded by Rei and his team behind NANOPASS, nanoverse HQ, and the upcoming Phantom
                 Network and NFTY Keys. The core team bring a diverse range of skill sets and our network is extensive.
                 Our passions lie in connecting with like-minded people in the NFT space, sharing knowledge, and building
                 each other up.

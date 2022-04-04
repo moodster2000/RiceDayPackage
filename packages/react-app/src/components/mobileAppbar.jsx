@@ -120,6 +120,12 @@ export default function MobileAppbar({
       </HashLink>
       <hr class="solid" />
       <a
+        target="_blank" href="https://opensea.io/collection/riceday-gg-official"
+        className="mobSection"
+      >
+        <div className="mobSection">OpenSea</div>
+      </a>
+      <a
         target="_blank" href="https://www.discord.gg/riceday"
         className="mobSection"
       >

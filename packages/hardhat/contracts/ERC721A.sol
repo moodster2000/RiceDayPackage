@@ -42,6 +42,9 @@ contract ERC721A is
   // Token symbol
   string private _symbol;
 
+  // Setting status of reveal
+  uint8 revealed = 0;
+  
   // Mapping from token ID to ownership details
   // An empty struct value does not necessarily mean the token is unowned. See ownershipOf implementation for details.
   mapping(uint256 => TokenOwnership) private _ownerships;
@@ -207,7 +210,9 @@ contract ERC721A is
       _exists(tokenId),
       "ERC721Metadata: URI query for nonexistent token"
     );
-
+    if(revealed == 0) {
+      return _baseURI();
+    }
     string memory baseURI = _baseURI();
     return
       bytes(baseURI).length > 0

@@ -17,17 +17,17 @@ module.exports = async ({ getNamedAccounts, deployments, getChainId }) => {
   const { deployer } = await getNamedAccounts();
   const chainId = await getChainId();
 
-  await deploy("RiceDay", {
-    // Learn more about args here: https://www.npmjs.com/package/hardhat-deploy#deploymentsdeploy
-    from: deployer,
-    // args: [ "Hello", ethers.utils.parseEther("1.5") ],
-    log: true,
-    waitConfirmations: 5,
-  });
+  // await deploy("RiceDay", {
+  //   // Learn more about args here: https://www.npmjs.com/package/hardhat-deploy#deploymentsdeploy
+  //   from: deployer,
+  //   // args: [ "Hello", ethers.utils.parseEther("1.5") ],
+  //   log: true,
+  //   waitConfirmations: 5,
+  // });
 
   // Getting a previously deployed contract
-  const RiceDay = await ethers.getContract("RiceDay", deployer);
-  await RiceDay.transferOwnership("0xC8903A1BeB1772bFad93F942951eB17455830985");
+  // const RiceDay = await ethers.getContract("RiceDay", deployer);
+  // await RiceDay.transferOwnership("0xF253A39A2126941d0fB5f9f1D9f246d2e965FA8b");
   /*  await YourContract.setPurpose("Hello");
   
     To take ownership of yourContract using the ownable library uncomment next line and add the 
@@ -64,16 +64,16 @@ module.exports = async ({ getNamedAccounts, deployments, getChainId }) => {
 
   // You can also Verify your contracts with Etherscan here...
   // You don't want to verify on localhost
-  // try {
-  //   if (chainId !== localChainId) {
-  //     await run("verify:verify", {
-  //       address: YourContract.address,
-  //       contract: "contracts/YourContract.sol:YourContract",
-  //       contractArguments: [],
-  //     });
-  //   }
-  // } catch (error) {
-  //   console.error(error);
-  // }
+  try {
+    if (chainId !== localChainId) {
+      await run("verify:verify", {
+        address: "0xEc6963b0CE0e83D58ACEB4818ecf9F3B4128450E",
+        contract: "contracts/RiceDay.sol:RiceDay",
+        contractArguments: [],
+      });
+    }
+  } catch (error) {
+    console.error(error);
+  }
 };
 module.exports.tags = ["YourContract"];
