@@ -329,7 +329,7 @@ function App(props) {
               blockExplorer={blockExplorer}
             />
           </Route>
-          <Route path="/projectBeta">
+          <Route path="/minting">
             <MintPage
               address={address}
               loadWeb3Modal={loadWeb3Modal}
@@ -403,7 +403,7 @@ function App(props) {
               blockExplorer={blockExplorer}
             />
           </Route>
-          <Route path="/projectBeta">
+          <Route path="/minting">
             <MobileMintPage address={address} loadWeb3Modal={loadWeb3Modal} web3Modal={web3Modal} />
             <MobileAppbar
               useBurner={USE_BURNER_WALLET}
@@ -460,7 +460,7 @@ function App(props) {
       <div className="content">
         <div className="title">We're still cooking the rice</div>
         <div className="subTitle">
-          RiceDay is aiming to create the first and best Web3 food loyalty program. Food + NFTs = connecting people from
+          RiceDay is Food + NFTs = connecting people from
           everywhere, one grain at a time.
         </div>
       </div>

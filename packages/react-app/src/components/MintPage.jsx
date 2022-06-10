@@ -6,7 +6,6 @@ import sadRice from "../unknownPage/sadRice.png";
 import uncleRoger from "../mintingPage/uncleRoger.gif";
 import comboSticker3 from "../stickers/comboSticker3.png";
 import comboSticker2 from "../stickers/comboSticker5.png";
-
 import {
   useBalance,
   useContractLoader,
@@ -15,25 +14,46 @@ import {
   useOnBlock,
   useUserProviderAndSigner,
 } from "eth-hooks";
-// displays a page webMintingHeader
 
 export default function MintPage({ address, web3Modal, loadWeb3Modal, readContracts, writeContracts, tx }) {
-  const [saleState, setSaleState] = useState("presaleActive");
+  const [saleState, setSaleState] = useState("publicActive");
   const [quantity, setQuantity] = useState(1);
   let history = useHistory();
   const [route, setRoute] = useState();
+  const [group, setGroup] = useState();
+  const [key, setKey] = useState("");
+  const [canMint, setCanMint] = useState(0);
+  const [totalSupply, setTotalSupply] = useState(0);
+  const [currentSupply, setCurrentSupply] = useState(0);
+
+  var RLButton;
+
   useEffect(() => {
     setRoute(window.location.pathname);
   }, [setRoute]);
-
   const maxSupply = useContractReader(readContracts, "RiceDay", "MAX_SUPPLY");
-  if (maxSupply) {
-    console.log(`ALT max supply bois`, maxSupply.toString());
-  }
+  const current = useContractReader(readContracts, "RiceDay", "totalSupply");
+  var claimed = useContractReader(readContracts, "RiceDay", "balanceOf", [address]);
+  // const tokenURI = useContractReader(readContracts, "RiceDay", "tokenURI", [0]);
+  // if (tokenURI) {
+  //   console.log(tokenURI);
+  // }
+  useEffect(() => {
+    if (maxSupply) {
+      setTotalSupply(maxSupply.toString());
+    }
+  }, [maxSupply]);
+  useEffect(() => {
+    if (current) {
+      setCurrentSupply(current.toString());
+    }
+  }, [current]);
+
+
+
 
   const publicMint = async () => {
-    console.log("hello");
-    const ethAmount = 0.15;
+    const ethAmount = 0.088 * quantity;
     const result = tx(
       writeContracts.RiceDay.publicSaleMint(quantity, {
         value: parseEther(ethAmount.toString()),
@@ -60,21 +80,6 @@ export default function MintPage({ address, web3Modal, loadWeb3Modal, readContra
       },
     );
   };
-  //for the future
-  // const [saleComp, setSaleComp] = useState(
-  //   <div className="content">
-  //     <div className="leftContent">
-  //       <img src={sadRice} className="sideGraphic" />
-  //     </div>
-  //     <div className="rightContent">
-  //       <div className="webMintingHeader">404</div>
-  //       <div className="subHeader">Something went wrong</div>
-  //     </div>
-  //   </div>,
-  // );
-  // useEffect(() => {
-  //   console.log("firstTime");
-  // }, [saleState]);
   var saleComp;
   if (saleState == "comingSoon") {
     saleComp = (
@@ -104,49 +109,66 @@ export default function MintPage({ address, web3Modal, loadWeb3Modal, readContra
             {!web3Modal.cachedProvider ? (
               <div className="subHeader">You need to connect to your wallet first!</div>
             ) : (
-              <div className="subHeader">You can mint X Rice</div>
+              <div className="subHeader">You can mint {canMint} Rice</div>
             )}
             <div className="webMintingHeader">Presale is active now!</div>
-            <div style={{ color: "#A0A0A0" }} className="webBody3">
-              Number of Rice you want to mint:
-            </div>
-            <div className="toggleQuantityBox">
-              <div
-                style={{ backgroundColor: quantity == 1 ? "#3D3D3D" : "" }}
-                onClick={() => (quantity != 1 ? setQuantity(1) : setQuantity(0))}
-                className="columnQuant"
-              >
-                <div className={quantity == 1 ? "activeButton" : "button"} />
-                <div className="quantityTitle">1 Rice</div>
+
+            {canMint > 0 ? (
+              <div style={{ color: "#A0A0A0" }} className="webBody3">
+                Number of Rice you want to mint:
               </div>
-              <div
-                style={{ backgroundColor: quantity == 2 ? "#3D3D3D" : "" }}
-                onClick={() => (quantity != 2 ? setQuantity(2) : setQuantity(0))}
-                className="columnQuant"
-              >
-                <div className={quantity == 2 ? "activeButton" : "button"} />
-                <div className="quantityTitle">2 Rice</div>
+            ) : (
+              <div />
+            )}
+            {canMint > 0 ? (
+              <div className="toggleQuantityBox">
+                <div
+                  style={{ backgroundColor: quantity == 1 ? "#3D3D3D" : "" }}
+                  onClick={() => (quantity != 1 ? setQuantity(1) : setQuantity(0))}
+                  className="columnQuant"
+                >
+                  <div className={quantity == 1 ? "activeButton" : "button"} />
+                  <div className="quantityTitle">1 Rice</div>
+                </div>
+                <div
+                  style={{ backgroundColor: quantity == 2 ? "#3D3D3D" : "" }}
+                  onClick={canMint > 1 ? () => (quantity != 2 ? setQuantity(2) : setQuantity(0)) : () => {}}
+                  className="columnQuant"
+                >
+                  <div
+                    style={{ borderColor: canMint < 2 ? "#A0A0A0" : "" }}
+                    className={quantity == 2 ? "activeButton" : "button"}
+                  />
+                  <div style={{ color: canMint < 2 ? "#A0A0A0" : "" }} className="quantityTitle">
+                    2 Rice
+                  </div>
+                </div>
+                <div
+                  style={{ backgroundColor: quantity == 3 ? "#3D3D3D" : "" }}
+                  onClick={canMint > 2 ? () => (quantity != 3 ? setQuantity(3) : setQuantity(0)) : () => {}}
+                  className="columnQuant"
+                >
+                  <div
+                    style={{ borderColor: canMint < 3 ? "#A0A0A0" : "" }}
+                    className={quantity == 3 ? "activeButton" : "button"}
+                  />
+                  <div style={{ color: canMint < 3 ? "#A0A0A0" : "" }} className="quantityTitle">
+                    3 Rice
+                  </div>
+                </div>
               </div>
-              <div
-                style={{ backgroundColor: quantity == 3 ? "#3D3D3D" : "" }}
-                onClick={() => (quantity != 3 ? setQuantity(3) : setQuantity(0))}
-                className="columnQuant"
-              >
-                <div className={quantity == 3 ? "activeButton" : "button"} />
-                <div className="quantityTitle">3 Rice</div>
-              </div>
-            </div>
+            ) : (
+              <div />
+            )}
             {web3Modal.cachedProvider ? (
-              <div onClick={() => publicMint()} className="primaryButton">
-                Mint a Rice!
-              </div>
+              RLButton
             ) : (
               <div onClick={loadWeb3Modal} className="primaryButton">
                 Connect Wallet
               </div>
             )}
             <div className="webSupplyText">
-              {4}/{44} Minted
+              {currentSupply}/{totalSupply} Minted
             </div>
           </div>
         </div>
@@ -202,13 +224,18 @@ export default function MintPage({ address, web3Modal, loadWeb3Modal, readContra
               </div>
             </div>
             {web3Modal.cachedProvider ? (
-              <div className="primaryButton">Mint a Rice!</div>
+              <div onClick={quantity > 0 ? () => publicMint() : console.log("")} className="primaryButton">
+                Mint a Rice!
+              </div>
             ) : (
               <div onClick={loadWeb3Modal} className="primaryButton">
                 Connect Wallet
               </div>
             )}
-            <div className="webSupplyText">x/y Minted</div>
+            <div className="webSupplyText">
+              {" "}
+              {currentSupply}/{totalSupply} Minted
+            </div>
           </div>
         </div>
         <img src={comboSticker2} className="stickerCol1" />
@@ -341,13 +368,10 @@ export default function MintPage({ address, web3Modal, loadWeb3Modal, readContra
         <div className="congratsScreen">
           <div className="webMintingHeaderAlt">Congrats! Your Rice has arrived!</div>
           <div className="imageRow">
-            <img style={{ borderRadius: "20px" }} src={uncleRoger} className="sideGraphic" />
-            <img style={{ borderRadius: "20px" }} src={uncleRoger} className="sideGraphic" />
-            <img style={{ borderRadius: "20px" }} src={uncleRoger} className="sideGraphic" />
           </div>
-          <div onClick={() => {}} className="primaryButton">
+          <a target="_blank" href="https://opensea.io/collection/riceday-gg-official" className="primaryButton">
             Watch on OpenSea
-          </div>
+          </a>
         </div>
         <img src={comboSticker2} className="stickerCol1" />
       </div>

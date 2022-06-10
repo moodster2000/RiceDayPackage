@@ -9,14 +9,21 @@
   -webkit-font-smoothing: antialiased;
   .webContent {
     display: flex;
+    width: 100%;
     flex-direction: column;
+    .webImage{
+      width: auto;
+      height: 100vmin;
+      object-fit: contain;
+    }
     .roadmapContent {
       width: 100%;
       // padding-bottom: 3%;
       padding-left: 8%;
       padding-right: 8%;
       display: flex;
-      flex-direction: column;
+      flex-direction: row;
+      justify-content: space-between;
       .webTitle {
         text-align: start;
         font-family: "Be Vietnam Pro", sans-serif;

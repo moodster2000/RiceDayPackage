@@ -10,7 +10,7 @@ import stickerSushi from "../stickers/stickerSushi.png";
 // displays a page header
 
 export default function MobileMintPage({ address, web3Modal, loadWeb3Modal }) {
-  const [saleState, setSaleState] = useState("presaleActive");
+  const [saleState, setSaleState] = useState("publicActive");
   const [quantity, setQuantity] = useState(0);
   let history = useHistory();
   const [route, setRoute] = useState();
@@ -76,7 +76,7 @@ export default function MobileMintPage({ address, web3Modal, loadWeb3Modal }) {
             Connect Wallet
           </div>
         )}
-        <div className="mobSupplyText">x/y Minted</div>
+        <div className="mobSupplyText">956/3388 Minted</div>
         <div className="pictureContainer">
           <img style={{ borderRadius: "50px" }} src={uncleRoger} className="sideGraphic" />
           <div className="textBox">

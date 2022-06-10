@@ -5,6 +5,7 @@ import comboSticker7 from "../stickers/comboSticker7.png";
 import aboutGraphic from "../aboutPage/aboutGraphic.jpg";
 import friedRice from "../stickers/stickerFriedRice.png";
 import heartSticker from "../stickers/stickerRiceHead.png";
+import roadmapImg from "../roadmapPage/Roadmap_Desktop.png";
 
 export default function Roadmap() {
   return (
@@ -13,69 +14,11 @@ export default function Roadmap() {
       <div className="webContent">
         <div className="roadmapContent">
           <div className="webTitle">Roadmap</div>
-          <div className="phases">
-            <div className="phase">
-              <div className="box">
-                <div className="header">Phase 1</div>
-                <div className="subtitle">
-                  <ul>
-                    <li>8866 RiceDay NFTs arriving late March 2022!</li>
-                    <li>Airdrop collabs with different artists.</li>
-                    <li>First Social Event: Steamed Rice Up!</li>
-                  </ul>
-                </div>
-              </div>
-              <div className="altBox">
-                ★ Foodies will unite at NFT NYC 2022 for a night out to eat some great food!
-                <br />
-                <br />★ Partner with restaurants to offer secret menu items or deals!
-              </div>
-            </div>
-            <div className="phase">
-              <div className="box">
-                <div className="header">Phase 2</div>
-                <div className="subtitle">
-                  <ul>
-                    <li>$GRAIN token release.</li>
-                    <li>Restaurant Partnerships and Social Events.</li>
-                    <li>Exclusive beta-launch of the RiceDay App for holders.</li>
-                  </ul>
-                </div>
-              </div>
-              <div className="altBox">
-                ★ Collectors earn $grain tokens when they spend at partnered restaurants.
-                <br />
-                <br />★ Special items and deals for holders at partnered restaurants.
-              </div>
-            </div>
-            <div className="phase">
-              <div className="box">
-                <div className="header">Phase 3</div>
-                <div className="subtitle">
-                  <ul>
-                    <li>
-                      App is officially available to the public. Access restaurant reviews, special items, and deals.
-                    </li>
-                  </ul>
-                </div>
-              </div>
-              <div className="altBox">
-                ★ Non-holders can subscribe using $GRAIN tokens.
-                <br />
-                <br />★ $GRAIN can be also be used to redeem discounts in partner establishments.
-              </div>
-              <div className="altBox2">
-                <ul>
-                  <li>Expansion of partnership program with RiceDay Grain Awards.</li>
-                </ul>
-              </div>
-              <div className="altBox">★ Riceday plaques on display in partnered restaurants.</div>
-            </div>
-          </div>
-          <a className="readMore" target="_blank" href="https://medium.com/@ricedaygg/riceday-roadmap-313d1c2d6d74">
+          <a className="readMore" target="_blank" href="https://t.co/ANHz04RMbA">
             Read more
           </a>
         </div>
+        <img src={roadmapImg} className = "webImage"/>
         <div className="imageContainer">
           <img src={friedRice} className="stickerDet" />
         </div>

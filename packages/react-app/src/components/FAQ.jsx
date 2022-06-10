@@ -37,8 +37,7 @@ export default function FAQ() {
             </AccordionSummary>
             <AccordionDetails>
               <div className="answer">
-                Aside from owning a unique and amazing RiceDay avatar, you will get access to our food loyalty program
-                where you can earn deals and promotions at partnered restaurants.
+                Owning a unique and amazing RiceDay avatar.
                 <br />
                 Addtionally, owning our genesis RiceDay NFT certifies you as an early supporter and will earn you
                 priority access to our physical events as well as to our RiceDay app when it is released.

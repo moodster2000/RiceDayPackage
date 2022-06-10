@@ -38,13 +38,10 @@ export default function About() {
               art with real world utility for any foodie to love.
               <br />
               <br />
-              Your RiceDay NFT will serve as your membership for Web3’s first food loyalty program!
-              <br />
-              <br />
               Supply: 8866
               <br />
               <br />
-              Price: TBA
+              Price: 0.08
             </div>
           </div>
           <img src={ndAboutGraphic} className="sideGraphic" />

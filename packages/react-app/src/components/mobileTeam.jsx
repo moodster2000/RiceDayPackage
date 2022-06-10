@@ -186,36 +186,6 @@ export default function MobileTeam() {
         <div className="imageContainer">
           <img src={stickerGraingang} className="inBetweenSticker" />
         </div>
-        <div className="partnerContent">
-          <div className="mobileHeader">Partner</div>
-          <div className="partnerGraphic">
-            <a target="_blank" href="https://twitter.com/0xygenLabs" className="link">
-              <img src={linkIcon} className="imageInside" />
-            </a>
-            <img src={Oxygen} className="sideGraphic" />
-          </div>
-          <div className="name">
-            <hr class="mobileSolid" />
-            <div style={{ color: "#FF5E27", paddingLeft: "6%" }} className="mobileHeadline1">
-              0xygen labs
-            </div>
-            <hr class="mobileSolid" />
-          </div>
-          <div className="testBox">
-            <img src={PaperClip} className="paperClip" />
-            <div className="partnerBox">
-              <div style={{ color: "#3D3D3D", textAlign: "start" }} className="mobileHeadline1">
-                Even rocket engines need 0xygen
-              </div>
-              <div style={{ marginTop: "3%" }} className="mobileBodyText">
-                0xygen Labs is founded by Rei and his team behind NANOPASS, nanovers HQ, and the upcoming Phantom
-                Network and NFTY Keys. The core team bring a diverse range of skill sets and our network is extensive.
-                Our passions lie in connecting with like-minded people in the NFT space, sharing knowledge, and building
-                each other up.
-              </div>
-            </div>
-          </div>
-        </div>
       </div>
     </div>
   );

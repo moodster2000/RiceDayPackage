@@ -38,7 +38,7 @@ export default function Footer() {
           <a className="icon" target="_blank" href="https://www.twitter.com/ricedaygg">
             <img src={twitterLogo} />
           </a>
-          <a className="icon" target="_blank" href="https://medium.com/@ricedaygg/riceday-roadmap-313d1c2d6d74">
+          <a className="icon" target="_blank" href="https://medium.com/@ricedaygg/ricemap-f245c3a60e58">
             <img src={mediumLogo} />
           </a>
         </div>

@@ -14,10 +14,17 @@ import backgroundImage from "../background.png";
 import backgroundVideo from "../backgroundVideo.mp4";
 import MusicPlayer from "./MusicPlayer.jsx";
 import mobileBackground from "../mobileBackground.png";
+import { BrowserRouter, Switch, Route, Link, useHistory, withRouter, Redirect } from "react-router-dom";
 
 export default function MobileHomePage({ address, web3Modal }) {
   const [saleState, setSaleState] = useState("wlComing");
   const [saleTitle, setSaleTitle] = useState();
+  let history = useHistory();
+  const [route, setRoute] = useState();
+  useEffect(() => {
+    setRoute(window.location.pathname);
+  }, [setRoute]);
+
   // if (saleState == "wlComing" && web3Modal) {
   //
   //   setSaleTitle(
@@ -124,36 +131,26 @@ export default function MobileHomePage({ address, web3Modal }) {
       />
       <div className="mobileSaleStatus">
         <div className="mobBigHeader">
-          8866 Rices
-          <br />
-          are coming soon!
+          RiceDay are<br />ready to be served! 
         </div>
-        <div className="subTitle">Countdown to Presale Minting:</div>
         <div className="timer">
           <div className="time">
-            <div className="measure">Days</div>
-            <div className="value">{days < 0 ? `0` : days}</div>
+            <div className="value">0.08</div>
+            <div className="measure">per Rice</div>
           </div>
           <div class="vl"></div>
           <div className="time">
-            <div className="measure">Hours</div>
-            <div className="value">{hours < 0 ? `0` : hours}</div>
-          </div>
-          <div class="vl"></div>
-          <div className="time">
-            <div className="measure">Minutes</div>
-            <div className="value">{minutes < 0 ? `0` : minutes}</div>
-          </div>
-          <div class="vl"></div>
-          <div className="time">
-            <div className="measure">Seconds</div>
-            <div className="value">{seconds < 0 ? `0` : seconds}</div>
+            <div className="value">956/3388</div>
+            <div className="measure">minted</div>
           </div>
         </div>
         {/* //need to check if connected */}
         {!web3Modal.cachedProvider ? <div className="body2">You need to connect to your Wallet first!</div> : <div />}
-        {web3Modal.cachedProvider && seconds <= 0 && (days <= 0) & (hours <= 0) && minutes <= 0 ? (
-          <div className="mintButton">Mint a Rice!</div>
+        {web3Modal.cachedProvider? (
+          <div onClick={() => {
+            history.push(`/minting`);
+            setRoute(`/minting`);
+          }} className="mintButton">Mint a Rice!</div>
         ) : (
           <div></div>
         )}
